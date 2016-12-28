@@ -47,13 +47,13 @@ Class Upload extends CI_Controller{
     private function _acl(){
         //判断域名是否允许通过
         if(!isset($this->domain_filter[$_SERVER['HTTP_ORIGIN']])){
-            return_array(101,'域名来源未注册');
+            return return_array(101,'域名来源未注册');
         }
         $domain_filter_value = $this->domain_filter[$_SERVER['HTTP_ORIGIN']];
 
         $acl_arr = explode('@',$domain_filter_value);        
         if(count($acl_arr) !== 2){
-            return_array(102,'域名列表不存在');
+            return return_array(102,'域名列表不存在');
         }
 
         $this->group_name = $acl_arr[0];
@@ -62,9 +62,9 @@ Class Upload extends CI_Controller{
         //验证来源的ip
         $patten = '/'.str_replace('*','.*',str_replace('.','\.',$allow_ip_reg)).'/';
         if(empty(preg_match($patten,$_SERVER['REMOTE_ADDR']))){
-            return_array(103,'域名来源未注册');
+            return return_array(103,'域名来源未注册');
         }
-        return_array(0);
+        return return_array(0);
     }
     /**
      * 初始化image工厂，传入数据

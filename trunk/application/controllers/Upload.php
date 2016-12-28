@@ -34,7 +34,7 @@ Class Upload extends CI_Controller{
         if($acl_res['code'] != 0){
             exit_json($acl_res['code'],$acl_res['msg']);
         }
-        header('Access-Control-Allow-Origin:'.$_SERVER['HTTP_HOST']);
+        header('Access-Control-Allow-Origin:'.$_SERVER['HTTP_ORIGIN']);
         // header('Access-Control-Allow-Origin:http://dev-yungouadmin.wssoto.com');
         // 
         // $this->load->library('image_factory_lib');
@@ -45,13 +45,11 @@ Class Upload extends CI_Controller{
      * @author eason
      */
     private function _acl(){
-        p($_SERVER);
-        exit();
         //判断域名是否允许通过
-        if(!isset($this->domain_filter[$_SERVER['HTTP_HOST']])){
+        if(empty($this->domain_filter[$_SERVER['HTTP_ORIGIN']])){
             return_array(101,'域名来源未注册');
         }
-        $domain_filter_value = $this->domain_filter[$_SERVER['HTTP_HOST']];
+        $domain_filter_value = $this->domain_filter[$_SERVER['HTTP_ORIGIN']];
 
         $acl_arr = explode('@',$domain_filter_value);        
         if(count($acl_arr) !== 2){

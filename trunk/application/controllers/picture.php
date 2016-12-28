@@ -10,7 +10,7 @@ class Picture extends CI_Controller {
 		'www.ylxirang.com' => 'ylxirang',
         'dev.ylxirang.com' => 'test',
         'vstoreadmin.ylxirang.com' => 'ylxirang',
-        'dev-vstoreadmin.ylxirang.com' => 'test',
+        'dev-vstoreadmin.ylxirang.com' => 'test', 
 	);
 	
 	//构造函数

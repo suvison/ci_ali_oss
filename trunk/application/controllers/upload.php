@@ -7,7 +7,7 @@
 Class Upload extends CI_Controller{
 
     private $group_list = null;
-
+ 
     private $domain_filter = null;
 
     private $group_name = null;

@@ -5,6 +5,6 @@ class Test extends CI_Controller {
         phpinfo();
 
 		// $this->load->library("picture_lib");
-		// $this->picture_lib->test_upload();
+		// $this->picture_lib->test_upload(); 
 	}
 }

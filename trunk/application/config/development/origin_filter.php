@@ -6,5 +6,5 @@ $config['group_list'] = array(
 
 $config['domain_filter'] = array(
     'alioss.com' => 'test@*.*.*.*',
-    'jr.suvisen.com' => 'test@*.*.*.*',
+    'jr.suvisen.com' => 'eason@*.*.*.*'
 );

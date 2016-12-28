@@ -59,8 +59,12 @@ Class Upload extends CI_Controller{
         $this->group_name = $acl_arr[0];
         $allow_ip_reg = $acl_arr[1];
 
+        p($_SERVER);
+
         //验证来源的ip
         $patten = '/'.str_replace('*','.*',str_replace('.','\.',$allow_ip_reg)).'/';
+        p($patten );
+        exit();
         if(empty(preg_match($patten,$_SERVER['REMOTE_ADDR']))){
             return return_array(103,'域名来源未注册');
         }

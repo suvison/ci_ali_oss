@@ -6,7 +6,7 @@ Class Image_factory_lib{
 
     public $image_server;//
 
-    private $type = array(
+    private $type = array( 
         1 => 'ali_oss_image'
     );
     /**

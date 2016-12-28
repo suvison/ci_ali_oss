@@ -9,7 +9,7 @@ Class Ali_oss_image extends Image{
     private $config = null;
     private $bucket = null;
 
-    public function __construct($config){
+    public function __construct($config){ 
         if(
             !isset($config['bucket']) || empty($config['bucket']) ||
             !isset($config['accessKeyId']) || empty($config['accessKeyId']) ||

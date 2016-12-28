@@ -1,5 +1,5 @@
 <?php
-require_once 'ali_oss_image.php';
+require_once 'Ali_oss_image.php';
 Class Image_factory_lib{
 
     protected $image_info;//图片信息

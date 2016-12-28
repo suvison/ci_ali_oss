@@ -4,7 +4,7 @@
  * 1、来源过滤
  * 2、数据组装
  */
-Class upload extends CI_Controller{
+Class Upload extends CI_Controller{
 
     private $group_list = null;
 

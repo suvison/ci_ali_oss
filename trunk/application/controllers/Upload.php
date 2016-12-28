@@ -48,7 +48,7 @@ Class Upload extends CI_Controller{
         //判断域名是否允许通过
         p($this->domain_filter);
         p($_SERVER['HTTP_ORIGIN']);
-        p(isset($this->domain_filter[$_SERVER['HTTP_ORIGIN']]));
+        p(!isset($this->domain_filter[$_SERVER['HTTP_ORIGIN']]));
         exit();
         if(empty($this->domain_filter[$_SERVER['HTTP_ORIGIN']])){
             return_array(101,'域名来源未注册');

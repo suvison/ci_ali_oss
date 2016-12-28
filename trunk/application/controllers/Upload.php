@@ -46,6 +46,7 @@ Class Upload extends CI_Controller{
      */
     private function _acl(){
         //判断域名是否允许通过
+        var_dump(empty($this->domain_filter[$_SERVER['HTTP_ORIGIN']]));
         if(empty($this->domain_filter[$_SERVER['HTTP_ORIGIN']])){
             return_array(101,'域名来源未注册');
         }

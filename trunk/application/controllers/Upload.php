@@ -217,22 +217,44 @@ Class Upload extends CI_Controller{
 
          //获取微信服务器上的图片地址
         $url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$media_id;
-        p($url);
-        exit();
-        $image_data = file_get_contents($url);  
+        
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response = curl_exec($ch);
 
-        $image_extension = image_type_to_extension(mime_content_type($url));
-        p($image_extension);
-        exit();
-        if(empty($image_data)){
-            exit_json(132,'图片数据为空');
-        }  
+        if (curl_errno($ch)) {
+            trigger_error(curl_error($ch));
+        }
+        curl_close($ch);
+
+        //正则匹配
+        $patten = '/filename\s*=\s*\"([^\"]*)[\s\S]*Content-Length\s*\:\s*(\d*)\s*/';
+        preg_match($patten,$response,$image_res);
+        if(
+            empty($image_res[1]) ||
+            empty($image_res[2]) ||
+            empty($image_res[3])
+        ){
+            exit_json(132,'获取图片失败');
+        }
+
+        // $image_data = file_get_contents($url);  
+        // $image_extension = image_type_to_extension(mime_content_type($url));
+        // if(empty($image_data)){
+        //     exit_json(132,'图片数据为空');
+        // } 
+        
+        $image_name = $image_res[1];
+        $image_size = $image_res[2]; 
+        $image_data = $image_res[3]; 
+        $image_extension = array_pop(explode($image_name));
 
         //构造数据
         $image_info = array(
             'upload_path' => $this->upload_path_base.'/'.$this->group_name.'/'.$this->get_rand_dir(),
             'image_name' => false,//如果为false，由后面的类自定义生成
-            'image_extension' => 'png',
+            'image_extension' => $image_extension,
             'image_data' => $image_data,
         );
 

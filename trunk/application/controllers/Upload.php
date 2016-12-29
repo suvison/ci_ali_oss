@@ -1,4 +1,7 @@
 <?php
+        
+header('Access-Control-Allow-Origin:*');
+
 /**
  * 该接口作用
  * 1、来源过滤
@@ -15,6 +18,8 @@ Class Upload extends CI_Controller{
     private $upload_path_base = 'upload/image';
 
     private $image_info = null;
+
+    private $post = null;
 
     public function __construct(){
         parent::__construct();
@@ -35,8 +40,13 @@ Class Upload extends CI_Controller{
         if($acl_res['code'] != 0){
             exit_json($acl_res['code'],$acl_res['msg']);
         }
-        header('Access-Control-Allow-Origin:'.$_SERVER['HTTP_ORIGIN']);
-        // header('Access-Control-Allow-Origin:http://dev-yungouadmin.wssoto.com');
+
+        if(empty($this->input->post())){
+            exit_json(-3,'只能post访问');
+        }
+        $this->post = $this->input->post();
+
+        // header('Access-Control-Allow-Origin:*');
         // 
         // $this->load->library('image_factory_lib');
     }
@@ -116,7 +126,7 @@ Class Upload extends CI_Controller{
     }
 
 
-    public function ordinary_upoad(){
+    public function ordinary_upload(){
         if(count($_FILES) > 0){
             $file_info = array_shift($_FILES);
         }else{
@@ -124,12 +134,12 @@ Class Upload extends CI_Controller{
         }
 
         if($file_info['error'] != 0){
-            exit_json(110,'图片上传出错');
+            exit_json(121,'图片上传出错');
         }
         $extension_arr =  explode('.',$file_info['name']);
         //构造数据
         $image_info = array(
-            'upload_path' => $this->upload_path_base.'/'.$this->group_name.'/'.date('Ymd',time()),
+            'upload_path' => $this->upload_path_base.'/'.$this->group_name.'/'.$this->get_rand_dir(),
             'image_name' => false,//如果为false，由后面的类自定义生成
             'image_extension' => array_pop($extension_arr),
             'image_data' => file_get_contents($file_info['tmp_name']),
@@ -152,12 +162,55 @@ Class Upload extends CI_Controller{
     }
 
     public function data_upload(){
+        if(count($this->post) > 0){
+            $base64_image_content = array_shift($this->post);
+        }else{
+            $base64_image_content = $this->post;
+        }
 
+        if(empty(is_string($base64_image_content))){
+            exit_json(131,'图片格式错误');
+        }
+
+        //匹配 data:image/png;base64,
+        if(!preg_match('/^(data:image\/(\w+);base64,)/', $base64_image_content, $image_match_arr)){
+            exit_json(132,'图片格式错误');
+        }
+        $image_extension = $image_match_arr[2];
+        $image_data = base64_decode(str_replace($image_match_arr[1], '', $base64_image_content));
+
+
+        //构造数据
+        $image_info = array(
+            'upload_path' => $this->upload_path_base.'/'.$this->group_name.'/'.$this->get_rand_dir(),
+            'image_name' => false,//如果为false，由后面的类自定义生成
+            'image_extension' => $image_extension,
+            'image_data' => $image_data,
+        );
+
+        $this->image_info = $image_info;
+        $this->init_image_factory(1);
+        $res = $this->image_factory_lib->check_and_create_upload_path($image_info['upload_path']);
+        if($res['code'] != 0){//创建目录失败
+            exit_json($res);
+        }
+
+        //上传图片
+        $upload_res = $this->image_factory_lib->ordinary_upload();
+        if($upload_res['code'] != 0){
+            exit_json($upload_res);
+        }
+        exit_json(0,'上传成功',$upload_res['data']);
     }
 
     public function weixin_upload(){
-
+        p($_POST);
+        exit();
     }
 
+
+    public function get_rand_dir(){
+        return date('Ymd',time());
+    }
 }
 ?>

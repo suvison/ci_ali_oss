@@ -248,10 +248,8 @@ Class Upload extends CI_Controller{
         $image_name = $image_res[1];
         $image_size = $image_res[2]; 
         $image_data = $image_res[3]; 
-        p(explode('.',$image_name));
-        p(array_pop(explode('.',$image_name)));
-        exit();
-        $image_extension = array_pop(explode('.',$image_name));
+        $image_name_arr = explode('.',$image_name);
+        $image_extension = array_pop($image_name_arr);
 
         //构造数据
         $image_info = array(

@@ -217,7 +217,8 @@ Class Upload extends CI_Controller{
 
          //获取微信服务器上的图片地址
         $url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$media_id;
-       
+        p($url);
+        exit();
         $image_data = file_get_contents($url);  
 
         $image_extension = image_type_to_extension(mime_content_type($url));

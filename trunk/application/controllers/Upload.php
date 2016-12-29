@@ -219,6 +219,10 @@ Class Upload extends CI_Controller{
         $url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$media_id;
        
         $image_data = file_get_contents($url);  
+
+        $image_extension = image_type_to_extension(mime_content_type($url));
+        p($image_extension);
+        exit();
         if(empty($image_data)){
             exit_json(132,'图片数据为空');
         }  

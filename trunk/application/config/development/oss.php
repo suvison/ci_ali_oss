@@ -3,9 +3,10 @@ $config['ali_oss'] = array(
                     'bucket' => 'tongdui-dev',
 					'accessKeyId' => 'LTAIG1jI0YT1uEK1',
                     'accessKeySecret' => 'de1cluXhDJC8DSikjssPv5LrayPqiP',
-                    'image_server_url' => 'http://dev-static.ylxirang.com/',
+                    // 'image_server_url' => 'http://dev-static.ylxirang.com/',
                     // 'endpoint' => 'http://oss-cn-hangzhou-internal.aliyuncs.com',
-                    'endpoint' => 'http://oss-cn-hangzhou.aliyuncs.com',
+                    // 'endpoint' => 'http://oss-cn-hangzhou.aliyuncs.com',
+                    'endpoint' => 'oss-cn-hangzhou-internal.aliyuncs.com',
                     'isCName' => false,
                     'securityToken' => NULL
 				);

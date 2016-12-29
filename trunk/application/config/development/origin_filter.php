@@ -9,4 +9,7 @@ $config['domain_filter'] = array(
     'jr.suvisen.com' => 'eason@*.*.*.*',
     '*.jr.suvisen.com' => 'eason@*.*.*.*',
     'uploadtest.com' => 'eason@*.*.*.*',
+    '*.dev-vstore.wssoto.com' => 'eason@*.*.*.*',
+    'dev-vstore.wssoto.com' => 'eason@*.*.*.*',
+
 );

@@ -118,7 +118,10 @@ Class Upload extends CI_Controller{
 
     public function ordinary_upoad(){
 
-        $file_info = array_pop($_FILES);
+        if(count($_FILES) > 0){
+            $file_info = array_pop($_FILES);
+        }
+        $file_info = $_FILES;
 
         if($file_info['error'] != 0){
             exit_json(110,'图片上传出错');

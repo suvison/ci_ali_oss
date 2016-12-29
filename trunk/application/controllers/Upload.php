@@ -204,8 +204,29 @@ Class Upload extends CI_Controller{
     }
 
     public function weixin_upload(){
-        p($_POST);
-        exit();
+        $access_token = $this->post['access_token'];
+        $media_id = $this->post['media_id'];
+
+        if(
+            empty($access_token) || !is_string($access_token) || 
+            empty($media_id) || !is_string($media_id)
+        ){
+            exit_json(131,'参数错误，请携带参数 access_token，media_id');
+        }
+
+         //获取微信服务器上的图片地址
+        $url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$media_id;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $curl_res = curl_exec($ch);
+        if (curl_errno($ch)) {
+            trigger_error(curl_error($ch));
+        }
+        curl_close($ch);
+
+        p($curl_res);
+
     }
 
 

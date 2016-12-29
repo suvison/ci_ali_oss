@@ -204,8 +204,6 @@ Class Upload extends CI_Controller{
     }
 
     public function weixin_upload(){
-        p($this->post);
-        exit();
         if(
             !isset($this->post['access_token']) || !is_string($this->post['access_token']) || 
             !isset($this->post['media_id']) || !is_string($this->post['media_id'])

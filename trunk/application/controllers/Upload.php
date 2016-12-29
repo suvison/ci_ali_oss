@@ -229,7 +229,7 @@ Class Upload extends CI_Controller{
         curl_close($ch);
 
         //正则匹配
-        $patten = '/filename\s*=\s*\"([^\"]*)[\s\S]*Content-Length\s*\:\s*(\d*)\s*/';
+        $patten = '/filename\s*=\s*\"([^\"]*)[\s\S]*Content-Length\s*\:\s*(\d*)\s*([\s\S]*)/';
         preg_match($patten,$response,$image_res);
         if(
             empty($image_res[1]) ||

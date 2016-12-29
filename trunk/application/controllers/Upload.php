@@ -19,6 +19,7 @@ Class Upload extends CI_Controller{
     public function __construct(){
         parent::__construct();
         header('Content-type: application/json');
+        date_default_timezone_set('PRC');
         $this->load->config('origin_filter');
         if(empty($this->config->item('group_list'))){
             exit_json(-1,'没有设置组列表');

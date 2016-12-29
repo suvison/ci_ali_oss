@@ -218,20 +218,32 @@ Class Upload extends CI_Controller{
          //获取微信服务器上的图片地址
         $url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$media_id;
        
-        $a = file_get_contents($url);  
-        p($a);
-        exit();
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $curl_res = curl_exec($ch);
-        if (curl_errno($ch)) {
-            trigger_error(curl_error($ch));
+        $image_data = file_get_contents($url);  
+        if(empty($image_data)){
+            exit_json(132,'图片数据为空');
+        }  
+
+        //构造数据
+        $image_info = array(
+            'upload_path' => $this->upload_path_base.'/'.$this->group_name.'/'.$this->get_rand_dir(),
+            'image_name' => false,//如果为false，由后面的类自定义生成
+            'image_extension' => 'png',
+            'image_data' => $image_data,
+        );
+
+        $this->image_info = $image_info;
+        $this->init_image_factory(1);
+        $res = $this->image_factory_lib->check_and_create_upload_path($image_info['upload_path']);
+        if($res['code'] != 0){//创建目录失败
+            exit_json($res);
         }
-        curl_close($ch);
 
-        p($curl_res);
-
+        //上传图片
+        $upload_res = $this->image_factory_lib->ordinary_upload();
+        if($upload_res['code'] != 0){
+            exit_json($upload_res);
+        }
+        exit_json(0,'上传成功',$upload_res['data']);
     }
 
 

@@ -17,7 +17,7 @@ if (!function_exists('p')) {
  */
 if (!function_exists('return_array')) {
     function return_array($code = '',$msg = '',$data = '') {
-        if($code == ''){
+        if($code === ''){
             return array('code' => 404,'msg' => '非法错误码','data' => null);
         }
         return array('code' => $code,'msg' => $msg,'data' => $data);

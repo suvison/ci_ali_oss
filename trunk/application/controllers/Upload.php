@@ -45,13 +45,34 @@ Class Upload extends CI_Controller{
      * @author eason
      */
     private function _acl(){
-        p($_SERVER);
-        p($_SERVER['HTTP_ORIGIN']);
-        //判断域名是否允许通过
-        if(!isset($this->domain_filter[$_SERVER['HTTP_ORIGIN']])){
-            return return_array(101,'域名来源未注册');
+        if(empty($_SERVER['HTTP_ORIGIN'])){
+            return return_array(101,'域名列表不存在');
         }
-        $domain_filter_value = $this->domain_filter[$_SERVER['HTTP_ORIGIN']];
+
+        //去除http头
+        $http_origin = str_replace('http://','',$_SERVER['HTTP_ORIGIN']);
+
+        //不允许ip地址通过
+        if(filter_var($_SERVER['HTTP_ORIGIN'], FILTER_VALIDATE_IP)) {
+            return return_array(102,'不允许ip来源');
+        }
+        
+        $http_origin_arr = explode('.',$http_origin);
+
+        
+        //判断域名是否允许通过
+        if(!isset($this->domain_filter[$http_origin])){
+            if(count($http_origin_arr) <= 2){
+                return return_array(103,'域名来源未注册');
+            }
+            //如果是3级域名
+            $http_origin_arr[0] = '*';
+            if(!isset($this->domain_filter[implode('.',$http_origin_arr)])){
+                return return_array(104,'域名来源未注册');
+            }
+        }
+        //通过域名键值获取用户组和客户端ip限制
+        $domain_filter_value = $this->domain_filter[implode('.',$http_origin_arr)];
 
         $acl_arr = explode('@',$domain_filter_value);        
         if(count($acl_arr) !== 2){
@@ -61,12 +82,8 @@ Class Upload extends CI_Controller{
         $this->group_name = $acl_arr[0];
         $allow_ip_reg = $acl_arr[1];
 
-        p($_SERVER);
-
         //验证来源的ip
         $patten = '/'.str_replace('*','.*',str_replace('.','\.',$allow_ip_reg)).'/';
-        p($patten );
-        exit();
         if(empty(preg_match($patten,$_SERVER['REMOTE_ADDR']))){
             return return_array(103,'域名来源未注册');
         }
@@ -100,7 +117,6 @@ Class Upload extends CI_Controller{
 
     public function ordinary_upoad(){
         $file_info = array_pop($_FILES);
-
         if($file_info['error'] != 0){
             exit_json(110,'图片上传出错');
         }

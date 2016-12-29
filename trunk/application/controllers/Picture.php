@@ -71,6 +71,8 @@ class Picture extends CI_Controller {
 
         //获取微信服务器上的图片地址
         $url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=" . $_POST['access_token'] . "&media_id=" .$_POST['media_id'];
+        p($url);
+        exit();
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HEADER, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

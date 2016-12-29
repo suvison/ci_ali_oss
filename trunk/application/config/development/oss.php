@@ -5,7 +5,7 @@ $config['ali_oss'] = array(
                     'accessKeySecret' => 'de1cluXhDJC8DSikjssPv5LrayPqiP',
                     'image_server_url' => 'http://dev-static.ylxirang.com/',
                     // 'endpoint' => 'http://oss-cn-hangzhou-internal.aliyuncs.com',
-                    'endpoint' => 'http://tongdui-dev.oss-cn-hangzhou.aliyuncs.com',
+                    'endpoint' => 'http://oss-cn-hangzhou.aliyuncs.com',
                     'isCName' => false,
                     'securityToken' => NULL
 				);

@@ -19,17 +19,16 @@ Class Image_factory_lib{
             return_array(1,'文件资源错误');
         }
         if(
-            !isset($image_info['image_name']) || empty($image_info['image_name']) ||
-            !isset($image_info['extension']) || empty($image_info['extension']) ||
             !isset($image_info['upload_path']) || empty($image_info['upload_path']) ||
+            !isset($image_info['image_name']) || 
+            !isset($image_info['image_extension']) || empty($image_info['image_extension']) ||
             !isset($image_info['image_data']) || empty($image_info['image_data'])
         ){
-            return_array(2,'参数错误');
+            exit_json(2,'参数错误');
         }
-        if($image_info['image_name'] === false){
+        if(empty($image_info['image_name'])){
             $image_info['image_name'] = $this->generation_image_name();
         }
-        $image_info['image_upload_path'] = $image_info['upload_path'].'/'.$image_info['image_name'].'.'.$image_info['image_name'];
 
         $this->image_info = $image_info;
     }
@@ -61,7 +60,7 @@ Class Image_factory_lib{
      * 判断目录存不存在，不存在则创建
      * @author eason
      */
-    public function check_and_create_upload_path($check_and_create_upload_path = ''){
+    public function check_and_create_upload_path($upload_path = ''){
         return $this->image_server->check_and_create_upload_path($upload_path);
     } 
 
@@ -70,7 +69,7 @@ Class Image_factory_lib{
      * @author eason
      */
     public function ordinary_upload(){
-        return $this->image_server->ordinary_upload($this->image_info['image_upload_path'],$this->image_info['image_data']);
+        return $this->image_server->ordinary_upload($this->image_info['upload_path'],$this->image_info['image_name'],$this->image_info['image_extension'],$this->image_info['image_data']);
     }
 
     /**

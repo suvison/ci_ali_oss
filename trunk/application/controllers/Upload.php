@@ -117,24 +117,35 @@ Class Upload extends CI_Controller{
 
 
     public function ordinary_upoad(){
+
         $file_info = array_pop($_FILES);
+
         if($file_info['error'] != 0){
             exit_json(110,'图片上传出错');
         }
         $extension_arr =  explode('.',$file_info['name']);
         //构造数据
         $image_info = array(
-            'image_name' => false,//如果为false，由后面的类自定义生成
-            'extension' => array_pop($extension_arr),
             'upload_path' => $this->upload_path_base.'/'.$this->group_name.'/'.date('Ymd',time()),
+            'image_name' => false,//如果为false，由后面的类自定义生成
+            'image_extension' => array_pop($extension_arr),
             'image_data' => file_get_contents($file_info['tmp_name']),
         );
 
         $this->image_info = $image_info;
         $this->init_image_factory(1);
-        
-        $res = $this->image_factory_lib->check_upload_path($image_info['upload_path']);
-        p($res);
+        $res = $this->image_factory_lib->check_and_create_upload_path($image_info['upload_path']);
+        if($res['code'] != 0){//创建目录失败
+            exit_json($res);
+        }
+
+        //上传图片
+        $upload_res = $this->image_factory_lib->ordinary_upload();
+        if($upload_res['code'] != 0){
+            exit_json($upload_res);
+        }
+        exit_json(0,'上传成功',$upload_res['data']);
+
     }
 
     public function data_upload(){

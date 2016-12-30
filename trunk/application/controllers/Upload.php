@@ -41,14 +41,8 @@ Class Upload extends CI_Controller{
             exit_json($acl_res['code'],$acl_res['msg']);
         }
 
-        if(empty($this->input->post())){
-            exit_json(-3,'只能post访问');
-        }
+       
         $this->post = $this->input->post();
-
-        // header('Access-Control-Allow-Origin:*');
-        // 
-        // $this->load->library('image_factory_lib');
     }
 
     /**
@@ -143,6 +137,7 @@ Class Upload extends CI_Controller{
             'image_name' => false,//如果为false，由后面的类自定义生成
             'image_extension' => array_pop($extension_arr),
             'image_data' => file_get_contents($file_info['tmp_name']),
+            'image_size' => $file_info['size'],
         );
 
         $this->image_info = $image_info;
@@ -186,6 +181,7 @@ Class Upload extends CI_Controller{
             'image_name' => false,//如果为false，由后面的类自定义生成
             'image_extension' => $image_extension,
             'image_data' => $image_data,
+            'image_size' => strlen($image_data)
         );
 
         $this->image_info = $image_info;
@@ -257,6 +253,7 @@ Class Upload extends CI_Controller{
             'image_name' => false,//如果为false，由后面的类自定义生成
             'image_extension' => $image_extension,
             'image_data' => $image_data,
+            'image_size' => $image_size,
         );
 
         $this->image_info = $image_info;

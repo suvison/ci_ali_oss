@@ -105,12 +105,13 @@ Class Ali_oss_image extends Image{
      * 普通图片上传
      * @author eason
      */
-    public function ordinary_upload($upload_path = '',$image_name = '',$image_extension = '',$image_data = ''){
+    public function ordinary_upload($upload_path = '',$image_name = '',$image_extension = '',$image_data = '',$image_size){
         if(
             empty($upload_path) || 
             empty($image_name) || 
             empty($image_extension) || 
-            empty($image_data)
+            empty($image_data) ||
+            empty($image_size)
         ){
             return return_array(self::ERROR_PARAMS,self::ERROR_PARAMS_MSG);
         }
@@ -132,7 +133,11 @@ Class Ali_oss_image extends Image{
         $image_upload_path = $upload_path.$image_name.'.'.$image_extension;
 
         //组装数据
-        $response = $this->image_service->putObject($this->bucket,$image_upload_path,$image_data);
+        $option = array();
+        if($image_size > 0){
+            $option['length'] = $image_size;
+        }
+        $response = $this->image_service->putObject($this->bucket,$image_upload_path,$image_data,$option);
         if(!$this->check_respose($response)){
             return return_array(self::ERROR_UPLOAD,self::ERROR_UPLOAD_MSG);
         }

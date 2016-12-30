@@ -22,7 +22,8 @@ Class Image_factory_lib{
             !isset($image_info['upload_path']) || empty($image_info['upload_path']) ||
             !isset($image_info['image_name']) || 
             !isset($image_info['image_extension']) || empty($image_info['image_extension']) ||
-            !isset($image_info['image_data']) || empty($image_info['image_data'])
+            !isset($image_info['image_data']) || empty($image_info['image_data']) ||
+            !isset($image_info['image_size']) || empty($image_info['image_size'])
         ){
             exit_json(2,'参数错误');
         }
@@ -69,7 +70,7 @@ Class Image_factory_lib{
      * @author eason
      */
     public function ordinary_upload(){
-        return $this->image_server->ordinary_upload($this->image_info['upload_path'],$this->image_info['image_name'],$this->image_info['image_extension'],$this->image_info['image_data']);
+        return $this->image_server->ordinary_upload($this->image_info['upload_path'],$this->image_info['image_name'],$this->image_info['image_extension'],$this->image_info['image_data'],$this->image_info['image_size']);
     }
 
     /**
